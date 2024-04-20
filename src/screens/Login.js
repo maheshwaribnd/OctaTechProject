@@ -1,5 +1,5 @@
 import { TextField, Button } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
@@ -8,10 +8,23 @@ const Login = () => {
   const [userData, setUserData] = useState({
     Username: "",
     Password: "",
-  });
+  })
+
+  useEffect(() => {
+    const loggedInUser = localStorage.getItem('user');
+    if (loggedInUser) {
+      navigate("/dashboard")
+    }
+  }, []);
+
 
   const handleSignin = (e) => {
-    e.preventDefault();
+    const { name, value } = e.target;
+    setUserData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+    localStorage.setItem('user', JSON.stringify(userData));
     navigate("/dashboard")
   };
 
